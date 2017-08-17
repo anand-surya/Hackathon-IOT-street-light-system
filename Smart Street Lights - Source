@@ -1,0 +1,61 @@
+Source code for Smart Street Lights IoT project
+const int ldrSensor = A0;
+const int pirSensor = 2;
+//const int ledPin = 4;
+const int relay1 = 9;
+const int relay2 = 10;
+const int irSensor = 13;
+int pirValue = 0;
+int ldrValue = 0;
+int irValue = LOW;
+static int i = 0;
+void setup() {
+ 
+pinMode(relay1,OUTPUT);
+pinMode(relay2,OUTPUT);
+pinMode(ldrSensor,INPUT);
+pinMode(pirSensor,INPUT);
+ //digitalWrite(relay1,HIGH);
+ // digitalWrite(relay2,LOW);
+Serial.begin(9600);
+
+}
+
+void loop() {
+ldrValue = analogRead(ldrSensor);
+pirValue = digitalRead(pirSensor);
+irValue = digitalRead(irSensor);
+Serial.println(ldrValue);
+if(ldrValue <= 100)
+{
+  digitalWrite(relay1,LOW);
+  digitalWrite(relay2,HIGH);
+    if(pirValue == 1)
+     {
+      digitalWrite(relay2,LOW);
+      digitalWrite(relay1,HIGH);
+      delay(5000);
+     }
+     else
+     {
+      Serial.println("NO MOTION");
+     }
+     if(irValue == HIGH) 
+       {
+        Serial.println("A person in the way");
+        i = i+1;
+        Serial.println(i);
+        }
+       else
+       {
+        Serial.println("Path is clear");
+       }
+}
+else
+{
+  Serial.println("MORE THAN ENOUGH LIGHT");
+  digitalWrite(relay2,HIGH);
+  digitalWrite(relay1,HIGH);
+}
+
+}
